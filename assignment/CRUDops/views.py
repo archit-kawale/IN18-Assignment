@@ -8,15 +8,21 @@ from CRUDops.models import User
 
 @api_view(['GET'])
 def getUsers(request):
-    users = User.objects.all()
-    serializer = UserSerializer(users, many=True)
-    return Response(serializer.data)
+    try:
+        users = User.objects.all()
+        serializer = UserSerializer(users, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_204_NO_CONTENT)    
 
 @api_view(['GET'])
 def getUser(request, pk):
-    user = User.objects.get(id=pk)
-    serializer = UserSerializer(user, many=False)
-    return Response(serializer.data)
+    try:
+        user = User.objects.get(id=pk)
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 # @api_view(['PUT'])
 # def addUser(request):
@@ -29,7 +35,9 @@ def getUser(request, pk):
 
 @api_view(['DELETE'])
 def deleteUser(request, pk):
-    user = User.objects.get(id=pk)
-    user.delete()
-    
-    return Response('Item successfully deleted!')
+    try:
+        user = User.objects.get(id=pk)
+        user.delete()
+        return Response(status=status.HTTP_200_OK)
+    except:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
